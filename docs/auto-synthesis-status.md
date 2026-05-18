@@ -2,15 +2,45 @@
 
 ## Current Capability
 
-PySemBridge now has two automatic synthesis layers:
+PySemBridge now has three automatic synthesis layers:
 
 ```text
-1. generic recognizer/classifier for six major Python semantic-gap families
-2. concrete executable bridge synthesis for the pyload-like
+1. source-only project scan for candidate Python dynamic semantic gaps
+2. generic candidate Semantic Bridge IR synthesis for six major gap families
+3. concrete executable bridge synthesis for the pyload-like
    receiver + container + string_builder family
 ```
 
-Supported dynamic semantic gap family:
+The source-only scanner can be used when no CVE, PoC, or known broken trace is
+available. It walks the Python project AST, groups dynamic-feature evidence, and
+emits candidate gap specs that a downstream LLM or synthesizer can turn into
+Semantic Bridge IR.
+
+```bash
+python3 -m pysembridge.cli scan-gaps \
+  --project /path/to/python/project \
+  --project-name my-project \
+  --output experiments/results/my-project.gap-candidates.json \
+  --include-features
+
+python3 -m pysembridge.cli synthesize-generic-bridge \
+  --project /path/to/python/project \
+  --project-name my-project \
+  --output experiments/results/my-project.generic-bridge.json
+```
+
+The generic candidate families are:
+
+```text
+receiver resolution
+container/tuple element propagation
+string construction
+attribute indirection
+dynamic call/eval-like dispatch
+framework/decorator-style flow
+```
+
+The verified executable pyload family is:
 
 ```text
 receiver resolution
@@ -135,6 +165,7 @@ Currently implemented:
 ```text
 generic six-family AST feature classification
 generic candidate gap spec generation
+generic candidate Semantic Bridge IR generation
 pyload-like receiver/container/string_builder executable bridge generation
 ```
 
@@ -143,7 +174,7 @@ Not yet implemented:
 ```text
 executable bridge synthesis for every family
 precise family ranking using baseline traces
-LLM-assisted evidence extraction for ambiguous patterns
+LLM-assisted evidence extraction inside the PySemBridge CLI itself
 tool-specific projections beyond YASA facts/report enhancement
 ```
 

@@ -6,6 +6,21 @@
 prototype. It turns a CVE source project into a verified complete taint trace
 using the YASA-sembridge backend.
 
+For source-only exploration, PySemBridge also supports a lighter front end:
+
+```text
+arbitrary Python project
+  -> scan-gaps candidate dynamic semantic gap specs
+  -> synthesize-generic-bridge candidate Semantic Bridge IR
+  -> compile-yasa candidate facts
+  -> downstream analyzer or LLM pipeline verifies whether a full chain exists
+```
+
+This mode is intentionally hypothesis-generating. It helps find places where a
+static analyzer may lose Python semantics, but it does not claim a vulnerability
+until an analyzer-backed verification stage recovers a concrete source-to-sink
+trace.
+
 ## Command
 
 ```bash
