@@ -104,3 +104,7 @@ The current YASA integration uses report-level completion: YASA emits a baseline
 boundary finding, then PySemBridge facts append an enhanced complete-chain SARIF
 finding. Analyzer-level propagation injection is the next deeper integration
 stage.
+
+See `docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow
+and `integrations/yasa/yasa-sembridge-interface.patch` for the minimal YASA-side
+interface patch.
