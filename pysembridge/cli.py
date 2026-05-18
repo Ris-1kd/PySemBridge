@@ -9,7 +9,7 @@ from pathlib import Path
 from pysembridge.adapters.yasa.compiler import compile_bridge_to_yasa_facts
 from pysembridge.ir.loader import load_bridge
 from pysembridge.pipeline.yasa import run_yasa_pipeline
-from pysembridge.synthesizer.auto import synthesize_auto
+from pysembridge.synthesizer.auto import scan_project_gaps, synthesize_auto, synthesize_generic_bridge
 from pysembridge.synthesizer.pyload import synthesize_pyload_bridge
 from pysembridge.verifier.chain import verify_bridge_chain
 from pysembridge.verifier.sarif import verify_sarif_trace
@@ -52,6 +52,28 @@ def _synthesize_auto(args: argparse.Namespace) -> None:
     if not result.bridges:
         raise SystemExit("No executable bridge was synthesized. Use --format bundle to inspect candidate gap specs.")
     output.write_text(json.dumps(result.bridges[0], indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _scan_gaps(args: argparse.Namespace) -> None:
+    result = scan_project_gaps(
+        Path(args.project),
+        args.project_name,
+        include_features=args.include_features,
+    )
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _synthesize_generic_bridge(args: argparse.Namespace) -> None:
+    bridge = synthesize_generic_bridge(
+        Path(args.project),
+        args.project_name,
+        max_facts_per_family=args.max_facts_per_family,
+    )
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(bridge, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def _verify_sarif(args: argparse.Namespace) -> None:
@@ -137,6 +159,41 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output the first executable bridge or the full classification/spec bundle.",
     )
     synthesize_auto_parser.set_defaults(func=_synthesize_auto)
+
+    scan_gaps = subparsers.add_parser(
+        "scan-gaps",
+        help=(
+            "Scan an arbitrary Python project for dynamic semantic gap candidates. "
+            "This source-only mode does not require a CVE, PoC, source rule, or sink rule."
+        ),
+    )
+    scan_gaps.add_argument("--project", required=True, help="Path to any Python project source tree.")
+    scan_gaps.add_argument("--output", required=True, help="Path to write generic gap candidate JSON.")
+    scan_gaps.add_argument("--project-name", help="Project name stored in generated output.")
+    scan_gaps.add_argument(
+        "--include-features",
+        action="store_true",
+        help="Include every raw feature hit, not only grouped gap specs.",
+    )
+    scan_gaps.set_defaults(func=_scan_gaps)
+
+    synthesize_generic = subparsers.add_parser(
+        "synthesize-generic-bridge",
+        help=(
+            "Generate a source-only Semantic Bridge IR from dynamic gap candidates. "
+            "This does not require a CVE, PoC, source rule, or sink rule."
+        ),
+    )
+    synthesize_generic.add_argument("--project", required=True, help="Path to any Python project source tree.")
+    synthesize_generic.add_argument("--output", required=True, help="Path to write Semantic Bridge IR JSON.")
+    synthesize_generic.add_argument("--project-name", help="Project name stored in generated output.")
+    synthesize_generic.add_argument(
+        "--max-facts-per-family",
+        type=int,
+        default=5,
+        help="Maximum candidate facts emitted for each dynamic gap family.",
+    )
+    synthesize_generic.set_defaults(func=_synthesize_generic_bridge)
 
     verify_sarif = subparsers.add_parser(
         "verify-sarif",
