@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pysembridge.local/schemas/semantic_bridge.schema.json",
+  "title": "PySemBridge Semantic Bridge IR",
+  "type": "object",
+  "required": ["version", "bridge_id", "language", "project", "gap_types"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "bridge_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "type": "string",
+      "enum": ["python"]
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gap_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "receiver",
+          "container",
+          "dict_key",
+          "string_builder",
+          "rebinding",
+          "dynamic_class",
+          "getattr",
+          "special_method",
+          "callback_parser",
+          "closure",
+          "field"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "graph_facts": {
+      "$ref": "#/$defs/graphFacts"
+    },
+    "flow_facts": {
+      "$ref": "#/$defs/flowFacts"
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "function": {
+          "type": "string"
+        },
+        "expr": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["kind", "location", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "graphFacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "call_edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/callEdge"
+          }
+        },
+        "type_facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/typeFact"
+          }
+        },
+        "alias_facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/aliasFact"
+          }
+        },
+        "callback_facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/callbackFact"
+          }
+        },
+        "dynamic_class_facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dynamicClassFact"
+          }
+        }
+      }
+    },
+    "flowFacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "taint_transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taintTransfer"
+          }
+        },
+        "container_transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taintTransfer"
+          }
+        },
+        "dict_key_transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taintTransfer"
+          }
+        },
+        "string_transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taintTransfer"
+          }
+        },
+        "field_transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taintTransfer"
+          }
+        }
+      }
+    },
+    "callEdge": {
+      "type": "object",
+      "required": ["id", "from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/location"
+        },
+        "to": {
+          "$ref": "#/$defs/location"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "typeFact": {
+      "type": "object",
+      "required": ["id", "variable", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "variable": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "aliasFact": {
+      "type": "object",
+      "required": ["id", "name", "targets"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "callbackFact": {
+      "type": "object",
+      "required": ["id", "register", "trigger", "target"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "register": {
+          "$ref": "#/$defs/location"
+        },
+        "trigger": {
+          "$ref": "#/$defs/location"
+        },
+        "target": {
+          "$ref": "#/$defs/location"
+        },
+        "captures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "dynamicClassFact": {
+      "type": "object",
+      "required": ["id", "factory", "methods"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "factory": {
+          "type": "string"
+        },
+        "created_at": {
+          "$ref": "#/$defs/location"
+        },
+        "methods": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "taintTransfer": {
+      "type": "object",
+      "required": ["id", "from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "from": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "to": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
