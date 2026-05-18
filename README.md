@@ -27,6 +27,7 @@ pysembridge/
   pipeline/           End-to-end analyzer runners
   verifier/           Trace and safe-variant validation components
 bridges/              Per-CVE Semantic Bridge IR files
+benchmarks/py-bench/  Six Python CVE benchmark projects
 experiments/          Experiment scripts and generated outputs
 docs/                 Design notes
 ```

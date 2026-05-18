@@ -1,0 +1,9 @@
+prune .*
+
+graft src
+graft tests
+
+exclude *.ini .* Dockerfile
+include *.cfg *.md *.toml VERSION
+
+global-exclude __pycache__/* build/* locale/*

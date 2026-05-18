@@ -1,0 +1,48 @@
+include README.rst
+include COPYING.rst
+include LICENSE
+include setupbase.py
+include MANIFEST.in
+include pytest.ini
+include py.typed
+include mypy.ini
+include .mailmap
+include .flake8
+include .pre-commit-config.yaml
+include long_description.rst
+
+recursive-exclude tools *
+exclude tools
+exclude CONTRIBUTING.md
+exclude .editorconfig
+exclude SECURITY.md
+
+graft scripts
+
+# Load main dir but exclude things we don't want in the distro
+graft IPython
+
+# Documentation
+graft docs
+exclude docs/\#*
+exclude docs/man/*.1.gz
+
+exclude .git-blame-ignore-revs
+
+# Examples
+graft examples
+
+# docs subdirs we want to skip
+prune docs/build
+prune docs/gh-pages
+prune docs/dist
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.flc
+global-exclude *.yml
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .dircopy.log
+global-exclude .git
+global-exclude .ipynb_checkpoints

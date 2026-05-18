@@ -1,0 +1,16 @@
+#       ____________
+#   ___/       |    \_____________ _                 _ ___
+#  /        ___/    |    _ __ _  _| |   ___  __ _ __| |   \
+# /    \___/  ______/   | '_ \ || | |__/ _ \/ _` / _` |    \
+# \            ◯ |      | .__/\_, |____\___/\__,_\__,_|    /
+#  \_______\    /_______|_|   |__/________________________/
+#           \  /
+#            \/
+
+[build-system]
+requires = ["setuptools>=38.3", "wheel"]  # PEP 508 specifications.
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ['py36']

@@ -1,0 +1,6 @@
+
+[ed25519]
+PyNaCl>=1.4.0
+
+[rsa]
+cryptography

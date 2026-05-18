@@ -1,0 +1,13 @@
+*.pyc
+.project
+.pydevproject
+.settings
+.venv
+dist
+MANIFEST
+__pycache__
+rpyc.egg-info
+*.egg
+*.class
+*.swp
+build/

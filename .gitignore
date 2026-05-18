@@ -10,9 +10,9 @@ htmlcov/
 
 .venv/
 venv/
-build/
-dist/
-*.egg-info/
+/build/
+/dist/
+/*.egg-info/
 
 # Generated analyzer outputs and experiment artifacts.
 experiments/results/
