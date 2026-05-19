@@ -28,9 +28,9 @@ pysembridge/
   verifier/           Trace and safe-variant validation components
 bridges/              Per-CVE Semantic Bridge IR files
 benchmarks/py-bench/  Six Python CVE benchmark projects
-experiments/          Experiment scripts and generated outputs
+experiments/          Reproducible scripts and ignored generated outputs
 integrations/yasa/    Integrated YASA-sembridge engine copy
-docs/                 Design notes
+docs/                 Tool guide, workflow, and repository structure
 ```
 
 ## Quick Start
@@ -135,7 +135,8 @@ boundary finding, then PySemBridge facts append an enhanced complete-chain SARIF
 finding. Analyzer-level propagation injection is the next deeper integration
 stage.
 
-See `docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow
-and `docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge tool
-usage guide. The full modified YASA engine is checked in under
+See `docs/repository-structure.md` for the repository layout,
+`docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow, and
+`docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge usage
+guide. The full modified YASA engine is checked in under
 `integrations/yasa/YASA-Engine-sembridge/`.

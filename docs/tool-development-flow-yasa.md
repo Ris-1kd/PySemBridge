@@ -20,8 +20,8 @@ kept in:
 integrations/yasa/YASA-Engine-sembridge/
 ```
 
-This directory replaces the earlier patch-only integration and is the canonical
-backend to use for `--semanticBridgeFacts` experiments.
+This directory is the canonical backend to use for `--semanticBridgeFacts`
+experiments.
 
 ## Core Idea
 
@@ -34,7 +34,7 @@ Python project
   -> Semantic Bridge IR synthesis
   -> bridge verification
   -> YASA facts compilation
-  -> patched YASA run
+  -> YASA-sembridge run
   -> SARIF/report verification
 ```
 
@@ -171,7 +171,7 @@ url
   -> self.c.execute.arg0
 ```
 
-Baseline YASA can report a boundary around `db.update_link_info(data)`, but the real SQL sink is inside `FileDatabaseMethods.update_link_info`. PySemBridge records the missing call edge and container/string propagation as Semantic Bridge IR, compiles it to YASA facts, and lets the patched YASA report include an enhanced complete-chain finding.
+Baseline YASA can report a boundary around `db.update_link_info(data)`, but the real SQL sink is inside `FileDatabaseMethods.update_link_info`. PySemBridge records the missing call edge and container/string propagation as Semantic Bridge IR, compiles it to YASA facts, and lets YASA-sembridge include an enhanced complete-chain finding in the report.
 
 ## Why Keep a Full YASA-sembridge Copy
 
