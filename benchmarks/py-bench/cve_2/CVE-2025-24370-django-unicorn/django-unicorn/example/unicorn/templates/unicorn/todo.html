@@ -1,0 +1,35 @@
+{% load static %}
+
+<div>
+    <div>{{ unicorn.errors.task.0.message }}</div>
+
+    <div class="field has-addons">
+        <p class="control">
+            <form unicorn:submit.prevent="add">
+                <input class="input" type="text" unicorn:model="task" unicorn:keydown.escape="task=''" placeholder="New task" id="task"></input>
+            </form>
+        </p>
+        <p class="control">
+            <span>
+            <button unicorn:click="add" class="button is-info">Add</button>&nbsp;&nbsp;
+            <button unicorn:click="$reset" class="button is-danger" {% if not tasks %}disabled{% endif %} style="border-radius: 4px;">Clear all tasks</button>
+        </span>
+
+            <span u:loading style="position: relative; left: 6px;">
+                <img src="{% static 'svg/oval.svg' %}" style="vertical-align: middle;"></img>
+            </span>
+        </p>
+    </div>
+
+    <p>
+        {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+            <li>{{ task }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        No tasks 🎉
+        {% endif %}
+    </p>
+</div>

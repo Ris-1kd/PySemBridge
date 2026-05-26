@@ -1,0 +1,14 @@
+{% extends "www/base.html" %}
+{% load unicorn %}
+
+{% block content %}
+
+<h2>HTML inputs</h2>
+
+{% unicorn 'html-inputs' %}
+
+{% unicorn 'todo' hello='world' %}
+
+{% unicorn 'todo' hello=example %}
+
+{% endblock content %}
