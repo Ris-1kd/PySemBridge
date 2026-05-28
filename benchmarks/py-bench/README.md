@@ -28,7 +28,7 @@ These older benchmarks keep the original repository-oriented layout:
 
 ## Semantic-Minimized CVE Set
 
-The repository now also includes twenty self-contained CVE samples focused on Python dynamic semantics and static-analysis flow breaks.
+The repository now also includes self-contained CVE samples focused on Python dynamic semantics and static-analysis flow breaks.
 
 ### Command Injection
 
@@ -42,8 +42,9 @@ The repository now also includes twenty self-contained CVE samples focused on Py
 - `cve-2025-54072-ytdlp`
 - `cve-2026-45369-python-utcp`
 
-### Path Traversal / Arbitrary File Write
+### Path Traversal / Arbitrary File Access
 
+- `cve-2024-23334-aiohttp`
 - `cve-2025-47273-setuptools`
 - `cve-2026-40576-excel-mcp`
 

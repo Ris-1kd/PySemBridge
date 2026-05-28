@@ -1,4 +1,4 @@
-# 20 CVE Summary Table
+# 21 CVE Summary Table
 
 | CVE | 项目版本 | 漏洞类型 | 代表 Python 特性 | YASA 扫描结果 | 链路完整性 | 断链位置 |
 |---|---|---|---|---|---|---|
@@ -11,6 +11,7 @@
 | CVE-2025-49835 | GPT-SoVITS（漏洞样本） | 命令注入 | dataclass 字段、helper return、`cmd +=` 累积 | baseline 只到 `shell_command -> Popen`；sembridge 已补全 | 不完整 | `request.asr_inp_dir -> select_input_path() -> cmd +=` 断 |
 | CVE-2025-54072 | yt-dlp（漏洞样本） | 命令注入 | `info` dict lookup、placeholder replacement、Windows 分支 | baseline 只看到后半段 shell quote / exec；sembridge 已补全 | 不完整 | `info dict -> placeholder replace -> shell_quote` 断 |
 | CVE-2026-45369 | python-utcp（漏洞样本） | 命令注入 | `tool_args` 字典、正则回调/嵌套函数、shell script builder | baseline 只到 `full_command -> Popen`；sembridge 已补全 | 不完整 | `tool_args["id"] -> replace_placeholder() -> script_lines/script` 断 |
+| CVE-2024-23334 | aiohttp（漏洞样本） | 路径穿越 / 任意文件读取 | `unquote`、receiver dispatch、`Path.resolve` 条件分支 | baseline 只到 `filepath -> open`；sembridge 已补全 | 不完整 | `request_path -> StaticResource.resolve() -> _match() -> _resolve_path()` 断 |
 | CVE-2025-47273 | setuptools（漏洞样本） | 路径穿越 / 任意文件写入 | `urlparse` / `unquote`、helper forwarding、`os.path.join` 语义 | baseline 只到 `filename -> open`；sembridge 已补全 | 不完整 | `url -> egg_info_for_url() -> name -> os.path.join(tmpdir, name)` 断 |
 | CVE-2026-40576 | excel-mcp-server（漏洞样本） | 路径穿越 / 任意文件写入 | `tool_args` 字典字段、helper return、`EXCEL_FILES_PATH + join` | baseline 只到 `target_file -> open`；sembridge 已补全 | 不完整 | `tool_args["filepath"] -> select_filepath() -> get_excel_path()` 断 |
 | CVE-2022-28346 | Django（漏洞样本） | SQL 注入 | ORM alias、容器传播、查询编译链 | baseline 只到近端 SQL 执行边界；sembridge 已补全 | 不完整 | alias source 经 ORM 聚合/编译链到 `cursor.execute` 前断 |
@@ -22,4 +23,3 @@
 | CVE-2025-67644 | langgraph-checkpoint-sqlite（漏洞样本） | SQL 注入 | dict key、helper composition、WHERE fragment | baseline 只到后半段 SQL statement；sembridge 已补全 | 不完整 | `_metadata_predicate() -> search_where() -> list()` 断 |
 | CVE-2026-29080 | Rucio（漏洞样本） | SQL 注入 | filter key/value 到局部变量、dialect 分支、`sqlalchemy.text` 格式化 | baseline 到近端 raw SQL 构造；sembridge 设计为补全 | 不完整 | `HTTP filter key/value -> Oracle branch -> text(...)` 断 |
 | CVE-2026-41490 | dagster-snowflake（漏洞样本） | SQL 注入 | 容器字段、helper chain、静态分区子句字符串化 | baseline 到近端 WHERE clause 构造；sembridge 设计为补全 | 不完整 | `partition key -> TablePartitionDimension -> _static_where_clause` 断 |
-
